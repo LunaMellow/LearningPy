@@ -1,4 +1,0 @@
-# Learning Pyglet
-
-import pyglet
-
