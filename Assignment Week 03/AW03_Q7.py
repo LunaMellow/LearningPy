@@ -32,21 +32,25 @@ class MainWindow(Window):
         self.size = list(self.get_size())
         self.wx, self.wy = self.size[0], self.size[1]
 
+        # Batch rendering
+        self.batch = Batch()
+
         # Shape lists/arrays
         self.shapes_all = []
         self.shapes_circle = []
 
-        # Batch rendering
-        self.batch = Batch()
+        # Initiate tasks
+        self.current_task = 'none'
 
+        # Starting checkpoint
         print("Started correctly")
 
     """
-    
+
         > window.NewShape
         -------------------
         @brief  :  Draws new shapes using pyglet graphics
-        
+
     """
     class NewShape:
         def __init__(self, shape_type, x, y, batch, **kwargs):
@@ -66,6 +70,25 @@ class MainWindow(Window):
             else:
                 raise ValueError("Invalid shape type")
 
+    def task_a(self):
+        print("Task a has run")
+
+    def task_b(self):
+        print("Task b has run")
+
+    def task_none(self):
+        print("Task none has run")
+
+    def tasks(self):
+        return {
+            'a': self.task_a,
+            'b': self.task_b,
+            'none': self.task_none
+        }
+
+    def on_key_press(self, symbol, modifiers):
+        pass
+
     def on_draw(self):
 
         # Window clear
@@ -83,9 +106,18 @@ class MainWindow(Window):
     
 """
 if __name__ == '__main__':
-
     # Window properties
     window = MainWindow(caption="BPROG - Luna Sofie Bergh", width=1280, height=720, resizable=True)
     window.set_minimum_size(width=400, height=300)
     window.set_mouse_visible(visible=True)
+
+    window.background = window.NewShape('rectangle',
+                                        x=0,
+                                        y=0,
+                                        batch=window.batch,
+                                        width=3840,
+                                        height=2160,
+                                        color=(13, 17, 23)
+                                        )
+
     run()
