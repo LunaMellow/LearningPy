@@ -106,6 +106,7 @@ class MainWindow(Window):
     
 """
 if __name__ == '__main__':
+
     # Window properties
     window = MainWindow(caption="BPROG - Luna Sofie Bergh", width=1280, height=720, resizable=True)
     window.set_minimum_size(width=400, height=300)
