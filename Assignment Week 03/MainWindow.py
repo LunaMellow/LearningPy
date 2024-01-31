@@ -7,8 +7,6 @@ from pyglet import *
 from pyglet.app import *
 from pyglet.window import *
 from pyglet.graphics import *
-
-# Library Imports
 from pyglet.shapes import *
 from random import uniform
 
@@ -33,10 +31,16 @@ class NewShape:
         self.direction = (uniform(-1, 1), uniform(-1, 1))  # Random direction
         self.shape_instance = shape_class(x=self.x, y=self.y, batch=batch, **kwargs)
 
-    def update(self, dt):
+    def update(self, dt, window_width, window_height):
         speed = 50  # Adjust the speed as needed
         self.x += self.direction[0] * speed * dt
         self.y += self.direction[1] * speed * dt
+
+        # Wrap around horizontally
+        self.x %= window_width
+
+        # Wrap around vertically
+        self.y %= window_height
 
         x, y = self.x, self.y
         self.shape_instance.x = x
@@ -56,19 +60,22 @@ class Circles:
             shape_type='circle',
             x=self.circle_x,
             y=self.circle_y,
-            radius=randint(5, 25),
-            color=self.color1,
+            radius=randint(5, 15),
+            color=(randint(0, 255), randint(0, 255), randint(0, 255)),
             batch=self.particle_batch)
 
-    def update(self, dt):
-        self.circle.update(dt)
+    def update(self, dt, window_width, window_height):
+        self.circle.update(dt, window_width, window_height)
 
 
 class Lines:
     color1 = (255, 255, 255)
 
-    def __init__(self):
+    def __init__(self, window_height, start_outside=True):
         self.particle_batch = Batch()
+
+        self.line_x = randint(100, 1180)
+        self.line_y = randint(0, window_height)
 
         self.line_x = randint(100, 1180)
         self.line_y = randint(100, 620)
@@ -77,15 +84,15 @@ class Lines:
             shape_type='line',
             x=self.line_x,
             y=self.line_y,
-            x2=randint(self.line_x + 50, self.line_x + 150),
-            y2=randint(self.line_y + 50, self.line_y + 150),
+            x2=randint(self.line_x + 0, self.line_x + 50),
+            y2=randint(self.line_y + 0, self.line_y + 50),
             width=4,
-            color=self.color1,
+            color=(randint(0, 255), randint(0, 255), randint(0, 255)),
             batch=self.particle_batch
         )
 
-    def update(self, dt):
-        self.line.update(dt)
+    def update(self, dt, window_width, window_height):
+        self.line.update(dt, window_width, window_height)
 
 
 class MainWindow(Window):
@@ -100,28 +107,25 @@ class MainWindow(Window):
         self.particles = []
         self.mushroom_cows = []
 
-        for i in range(10):
+        for i in range(50):
             new_circle = Circles()
             self.particles.append(new_circle)
 
-        for i in range(10):
-            new_line = Lines()
+        for i in range(50):
+            new_line = Lines(window_height=self.wy, start_outside=True)
             self.particles.append(new_line)
 
     def update(self, dt):
-        print("Updating particles...")
         for particle in self.particles:
-            particle.update(dt)
+            particle.update(dt, self.wx, self.wy)
 
-    # Mouse press event
-    def on_mouse_press(self, x, y, button, modifiers):
-        if button == mouse.LEFT:
-            print("Cow:", x, y)
-            new_cow = MushroomCow(init_pos=(x, y))
+    # Keyboard press event
+    def on_key_press(self, symbol, modifiers):
+        if symbol == key.SPACE:
+            new_cow = MushroomCow(init_pos=(randint(100, 1180), randint(100, 620)))
             self.mushroom_cows.append(new_cow)
 
     def on_draw(self):
-        print("Drawing window...")
 
         # Window clear
         window.clear()
@@ -129,14 +133,14 @@ class MainWindow(Window):
         # Draw background
         background_batch.draw()
 
+        # Draw particles
+        for particle in self.particles:
+            particle.update(1 / 60, self.wx, self.wy)  # Call the update method for each particle
+            particle.particle_batch.draw()
+
         # Draws and updates the cows
         for cow in self.mushroom_cows:
             cow.Cow_Batch.draw()
-
-        # Draw particles
-        for particle in self.particles:
-            particle.update(1 / 60)  # Call the update method for each particle
-            particle.particle_batch.draw()
 
         # Draw fps for performance insights
         fps_display.draw()
