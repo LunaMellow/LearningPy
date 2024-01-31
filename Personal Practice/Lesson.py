@@ -23,11 +23,13 @@ d = diff.mag
 
 if d < radius1:
     pass # Collission
+
 """
 
 # check u.dot(v) / u.dot(u) < 0, > 1, otherwise above.
 
 """
+
     Circles color collision
 
     for i in range(len(circles)):
@@ -49,8 +51,5 @@ if d < radius1:
     if(minx > width):
         x1 = x1 - width - (maxx - minx)
         x2 = x2 - width - (maxx - minx)
-        
 
 """
-
-print(d)
