@@ -377,41 +377,26 @@ class MushroomCow:
         self.scaling_matrix = Mat3()
         self.combined_matrix = Mat3()
 
-    # Transformation Point
-    def apply_transformation(self, x, y):
-        transformed_point = self.combined_matrix.transform_point(x, y)
-        return transformed_point
-
     def update_cow(self, dt):
-        # Use the instance methods on self
-        self.translate(100 * dt, 100 * dt)
-        self.combine(self.translation_matrix, self.rotation_matrix, self.scaling_matrix)
 
+        # Translate the cow
+        self.translation_matrix = self.translation_matrix.translate(100 * dt, 100 * dt)
+
+        # Rotate the cow
+        self.rotation_matrix = self.rotation_matrix.rotate(0.1)  # Replace 0.1 with your desired rotation angle
+
+        # Scale the cow
+        self.scaling_matrix = self.scaling_matrix.scale(1.01, 1.01)
+
+        # Combine all transformations
+        self.combined_matrix = self.translation_matrix @ self.rotation_matrix @ self.scaling_matrix
+
+        # Apply transformations to each shape
         for shape in self.Cow_Parts:
             # Get the transformed position using the new apply_transformation method
-            transformed_position = self.apply_transformation(shape.x, shape.y)
+            transformed_position = self.combined_matrix.transform_point(shape.x, shape.y)
             # Update the shape's position with the transformed position
             shape.shape_instance.x, shape.shape_instance.y = transformed_position
-
-    # Translation Matrix
-    def translate(self, dx, dy):
-        self.translation_matrix = self.translation_matrix.translate(dx, dy)
-        return self
-
-    # Rotation Matrix
-    def rotate(self, theta):
-        self.rotation_matrix = self.rotation_matrix.rotate(theta)
-        return self
-
-    # Scaling Matrix
-    def scale(self, sx, sy):
-        self.scaling_matrix = self.scaling_matrix.scale(sx, sy)
-        return self
-
-    # Combining Matrix
-    def combine(self, trans, rot, scale):
-        self.combined_matrix = trans @ rot @ scale
-        return self
 
 
 """
