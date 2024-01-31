@@ -1,28 +1,4 @@
-"""
-
-    Assignment Week 03
-    -------------------
-    Question 7
-
-    @brief   :  Pyglet shape behaviour
-    @author  :  Luna Sofie Bergh
-    @date    :  29-01-2024
-
-    Menu Description
-    -------------------
-    SPACE BAR : Switch between the questions
-
-    PS
-    -------------------
-    I spent an ungodly amount of time on this
-    cow and structure. Hope you guys appreciate
-    my effort and dedication to making something
-    really cool!
-
-"""
-
 # File Imports
-from NewShape import NewShape
 from MushroomCow import MushroomCow
 
 # Library Imports
@@ -31,6 +7,40 @@ from pyglet import *
 from pyglet.app import *
 from pyglet.window import *
 from pyglet.graphics import *
+
+# Library Imports
+from pyglet.shapes import *
+from random import uniform
+
+
+class NewShape:
+    SHAPE_MAP = {
+        'circle': Circle,
+        'star': Star,
+        'rectangle': Rectangle,
+        'line': Line,
+        'arc': Arc,
+        'ellipse': Ellipse,
+    }
+
+    def __init__(self, shape_type, x, y, batch, **kwargs):
+        if shape_type not in self.SHAPE_MAP:
+            raise ValueError("Invalid shape type")
+
+        shape_class = self.SHAPE_MAP[shape_type]
+        self.x = x
+        self.y = y
+        self.direction = (uniform(-1, 1), uniform(-1, 1))  # Random direction
+        self.shape_instance = shape_class(x=self.x, y=self.y, batch=batch, **kwargs)
+
+    def update(self, dt):
+        speed = 50  # Adjust the speed as needed
+        self.x += self.direction[0] * speed * dt
+        self.y += self.direction[1] * speed * dt
+
+        x, y = self.x, self.y
+        self.shape_instance.x = x
+        self.shape_instance.y = y
 
 
 class Circles:
@@ -52,26 +62,6 @@ class Circles:
 
     def update(self, dt):
         self.circle.update(dt)
-
-    def check_collision(self, other_shape):
-        # Implement collision logic for circles
-        if isinstance(other_shape, Circles):
-            distance = ((self.circle_x - other_shape.circle_x) ** 2 + (
-                    self.circle_y - other_shape.circle_y) ** 2) ** 0.5
-            combined_radii = self.circle.shape_instance.radius + other_shape.circle.shape_instance.radius
-            result = distance <= combined_radii
-            if result:
-                print(f"Collision detected between Circles at ({self.circle_x}, {self.circle_y}) "
-                      f"and ({other_shape.circle_x}, {other_shape.circle_y})")
-            return result
-        return False
-
-    def handle_collision(self, other_shape):
-        # Handle collision logic for circles
-        self.circle.shape_instance.color = (255, 0, 0)
-        other_shape.circle.shape_instance.color = (255, 0, 0)
-        print(
-            f"Collision detected between Circles at ({self.circle_x}, {self.circle_y}) and ({other_shape.circle_x}, {other_shape.circle_y})")
 
 
 class Lines:
@@ -97,28 +87,6 @@ class Lines:
     def update(self, dt):
         self.line.update(dt)
 
-    def check_collision(self, other_shape):
-        # Implement collision logic for lines
-        if isinstance(other_shape, Lines):
-            # Example: Check if the bounding boxes overlap
-            result = (
-                    self.line_x < other_shape.line_x + other_shape.line.shape_instance.x2 and
-                    self.line_x + self.line.shape_instance.x2 > other_shape.line_x and
-                    self.line_y < other_shape.line_y + other_shape.line.shape_instance.y2 and
-                    self.line_y + self.line.shape_instance.y2 > other_shape.line_y
-            )
-            if result:
-                print(f"Collision detected between Line at ({self.line_x}, {self.line_y}) "
-                      f"and Line at ({other_shape.line_x}, {other_shape.line_y})")
-            return result
-        return False
-
-    def handle_collision(self, other_shape):
-        # Handle collision logic for lines
-        self.line.shape_instance.color = (255, 0, 0)
-        other_shape.line.shape_instance.color = (255, 0, 0)
-        print(f"Collision detected between Line at ({self.line_x}, {self.line_y}) and Line at ({other_shape.line_x}, {other_shape.line_y})")
-
 
 class MainWindow(Window):
     def __init__(self, *args, **kwargs):
@@ -142,15 +110,6 @@ class MainWindow(Window):
 
     def update(self, dt):
         print("Updating particles...")
-        self.update_all_particles(dt)
-
-    def update_all_particles(self, dt):
-        for i, particle1 in enumerate(self.particles):
-            for j, particle2 in enumerate(self.particles):
-                if i != j and particle1.check_collision(particle2):
-                    print(f"Potential collision detected between particles {i} and {j}")
-                    particle1.handle_collision(particle2)
-                    particle2.handle_collision(particle1)
         for particle in self.particles:
             particle.update(dt)
 
@@ -183,13 +142,6 @@ class MainWindow(Window):
         fps_display.draw()
 
 
-"""
-
-    > __main__
-    -------------------
-    @brief  :  Sets properties for MainWindow
-    
-"""
 if __name__ == '__main__':
     # Window properties
     window = MainWindow(caption="BPROG - Luna Sofie Bergh", width=1280, height=720, resizable=False)
