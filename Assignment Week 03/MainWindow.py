@@ -1,5 +1,45 @@
+"""
+
+    Assignment Week 03
+    -------------------
+    Question 7
+    @brief   :  Pyglet shape behaviour
+    @author  :  Luna Sofie Bergh
+    @date    :  29-01-2024
+
+    Please go to my github to see my strong
+    dedication to this and my overall progress:
+    https://github.com/LunaMellow/LearningPy
+
+    PS
+    -------------------
+    I spent an ungodly amount of time on this
+    cow and structure. Hope you guys appreciate
+    my effort and dedication to making something
+    really cool! Even tho I might not have everything
+    correct and missing collisions, I will add it soon.
+
+    I have spent most of my time tinkering with code
+    structure, logic for the classes, function and
+    modules that I have made. I went in with the
+    intention of not just trying to pass the assignment
+    but instead focus on how I can build a solid structure
+    to use in the entire semester going forwards. So I
+    might not have done everything the task asked me to,
+    but I have learnt so incredibly much by learning pyglet
+    this way, and just tinkering to find the best possible
+    structure. Thank you for reading, I won't give up! :)
+
+    Menu Description
+    -------------------
+    SPACE BAR : Spawn multiple cows for task B
+
+"""
+
 # File Imports
 from MushroomCow import MushroomCow
+from NewShape import NewShape
+from Particles import Circles, Lines
 
 # Library Imports
 from random import randint
@@ -7,92 +47,6 @@ from pyglet import *
 from pyglet.app import *
 from pyglet.window import *
 from pyglet.graphics import *
-from pyglet.shapes import *
-from random import uniform
-
-
-class NewShape:
-    SHAPE_MAP = {
-        'circle': Circle,
-        'star': Star,
-        'rectangle': Rectangle,
-        'line': Line,
-        'arc': Arc,
-        'ellipse': Ellipse,
-    }
-
-    def __init__(self, shape_type, x, y, batch, **kwargs):
-        if shape_type not in self.SHAPE_MAP:
-            raise ValueError("Invalid shape type")
-
-        shape_class = self.SHAPE_MAP[shape_type]
-        self.x = x
-        self.y = y
-        self.direction = (uniform(-1, 1), uniform(-1, 1))  # Random direction
-        self.shape_instance = shape_class(x=self.x, y=self.y, batch=batch, **kwargs)
-
-    def update(self, dt, window_width, window_height):
-        speed = 50  # Adjust the speed as needed
-        self.x += self.direction[0] * speed * dt
-        self.y += self.direction[1] * speed * dt
-
-        # Wrap around horizontally
-        self.x %= window_width
-
-        # Wrap around vertically
-        self.y %= window_height
-
-        x, y = self.x, self.y
-        self.shape_instance.x = x
-        self.shape_instance.y = y
-
-
-class Circles:
-    color1 = (255, 255, 255)
-
-    def __init__(self):
-        self.particle_batch = Batch()
-
-        self.circle_x = randint(100, 1180)
-        self.circle_y = randint(100, 620)
-
-        self.circle = NewShape(
-            shape_type='circle',
-            x=self.circle_x,
-            y=self.circle_y,
-            radius=randint(5, 15),
-            color=(randint(0, 255), randint(0, 255), randint(0, 255)),
-            batch=self.particle_batch)
-
-    def update(self, dt, window_width, window_height):
-        self.circle.update(dt, window_width, window_height)
-
-
-class Lines:
-    color1 = (255, 255, 255)
-
-    def __init__(self, window_height, start_outside=True):
-        self.particle_batch = Batch()
-
-        self.line_x = randint(100, 1180)
-        self.line_y = randint(0, window_height)
-
-        self.line_x = randint(100, 1180)
-        self.line_y = randint(100, 620)
-
-        self.line = NewShape(
-            shape_type='line',
-            x=self.line_x,
-            y=self.line_y,
-            x2=randint(self.line_x + 0, self.line_x + 50),
-            y2=randint(self.line_y + 0, self.line_y + 50),
-            width=4,
-            color=(randint(0, 255), randint(0, 255), randint(0, 255)),
-            batch=self.particle_batch
-        )
-
-    def update(self, dt, window_width, window_height):
-        self.line.update(dt, window_width, window_height)
 
 
 class MainWindow(Window):

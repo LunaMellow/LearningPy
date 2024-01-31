@@ -8,7 +8,6 @@
 """
 
 # File imports
-from Mat3 import Mat3
 from NewShape import NewShape
 
 # Library Imports
@@ -135,6 +134,7 @@ class MushroomCow:
     #       THIS IS WHERE WE CREATE PIXELS FROM THE MAPS     #
     #                                                        #
     ##########################################################
+
     # Create each body part line for line, pixel by pixel
     def create_part(self, shape_type, color_map, x_offset, y_offset, batch):
         # Pixel size
@@ -169,6 +169,8 @@ class MushroomCow:
 
         # 2D vector position of the Cow
         self.position = Vec2(*init_pos)
+        self.position.x -= 100
+        self.position.y += 80
 
         # # Cow Matrixes
         # self.translation_matrix = Mat3()

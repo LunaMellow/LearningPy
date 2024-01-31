@@ -11,6 +11,7 @@
 from pyglet.shapes import *
 from random import uniform
 
+
 class NewShape:
     SHAPE_MAP = {
         'circle': Circle,
@@ -31,10 +32,16 @@ class NewShape:
         self.direction = (uniform(-1, 1), uniform(-1, 1))  # Random direction
         self.shape_instance = shape_class(x=self.x, y=self.y, batch=batch, **kwargs)
 
-    def update(self, dt):
+    def update(self, dt, window_width, window_height):
         speed = 50  # Adjust the speed as needed
         self.x += self.direction[0] * speed * dt
         self.y += self.direction[1] * speed * dt
+
+        # Wrap around horizontally
+        self.x %= window_width
+
+        # Wrap around vertically
+        self.y %= window_height
 
         x, y = self.x, self.y
         self.shape_instance.x = x
