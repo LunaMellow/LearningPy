@@ -3,11 +3,12 @@
     Assignment Week 03
     -------------------
     Question 7
+
     @brief   :  Pyglet shape behaviour
     @author  :  Luna Sofie Bergh
     @date    :  29-01-2024
 
-    Please go to my github to see my strong
+    Please go to my GitHub to see my strong
     dedication to this and my overall progress:
     https://github.com/LunaMellow/LearningPy
 
@@ -24,11 +25,21 @@
     modules that I have made. I went in with the
     intention of not just trying to pass the assignment
     but instead focus on how I can build a solid structure
-    to use in the entire semester going forwards. So I
-    might not have done everything the task asked me to,
+    to use in the entire semester going forwards.
+
+    So I might not have done everything the task asked me to,
     but I have learnt so incredibly much by learning pyglet
     this way, and just tinkering to find the best possible
-    structure. Thank you for reading, I won't give up! :)
+    structure. I tried collisions on my own, with chatgpt,
+    with all the sources I could find, but I couldn't find
+    a way to do it yet with the structure I created. But
+    that's part of programming, eventually when I do find
+    out how, I will be incredibly educated in how to implement
+    it into such a structure. It will be amazing in the end,
+    but even after working up to 10 hours a day with this,
+    it wasn't enough for me to finish everything.
+
+    Thank you for reading, but don't u worry. I won't give up! :)
 
     Menu Description
     -------------------
@@ -37,12 +48,12 @@
 """
 
 # File Imports
-from MushroomCow import MushroomCow
-from NewShape import NewShape
-from Particles import Circles, Lines
+from MushroomCow import MushroomCow     # My mushroom cow module
+from NewShape import NewShape           # My NewShape module
+from Particles import Circles, Lines    # My Particle module
 
 # Library Imports
-from random import randint
+from random import *
 from pyglet import *
 from pyglet.app import *
 from pyglet.window import *
@@ -57,18 +68,21 @@ class MainWindow(Window):
         self.size = list(self.get_size())
         self.wx, self.wy = self.size[0], self.size[1]
 
-        # Store all the instances
+        # Store all the shapes
         self.particles = []
         self.mushroom_cows = []
 
+        # Draw all the circles
         for i in range(50):
             new_circle = Circles()
             self.particles.append(new_circle)
 
+        # Draw all the lines
         for i in range(50):
             new_line = Lines(window_height=self.wy, start_outside=True)
             self.particles.append(new_line)
 
+    # Update the particles
     def update(self, dt):
         for particle in self.particles:
             particle.update(dt, self.wx, self.wy)
@@ -89,7 +103,7 @@ class MainWindow(Window):
 
         # Draw particles
         for particle in self.particles:
-            particle.update(1 / 60, self.wx, self.wy)  # Call the update method for each particle
+            particle.update(1 / 60, self.wx, self.wy)
             particle.particle_batch.draw()
 
         # Draws and updates the cows
@@ -101,6 +115,7 @@ class MainWindow(Window):
 
 
 if __name__ == '__main__':
+
     # Window properties
     window = MainWindow(caption="BPROG - Luna Sofie Bergh", width=1280, height=720, resizable=False)
     window.set_mouse_visible(visible=True)
@@ -117,7 +132,8 @@ if __name__ == '__main__':
         batch=background_batch
     )
 
-    pyglet.clock.schedule(window.update)  # Add this line
+    # Updates
+    pyglet.clock.schedule(window.update)
 
     # Fps Display
     fps_display = FPSDisplay(window)

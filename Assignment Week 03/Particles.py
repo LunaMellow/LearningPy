@@ -16,9 +16,9 @@ from pyglet.graphics import Batch
 
 
 class Circles:
-    color1 = (255, 255, 255)
-
     def __init__(self):
+
+        # Particle Batch
         self.particle_batch = Batch()
 
         self.circle_x = randint(100, 1180)
@@ -32,18 +32,19 @@ class Circles:
             color=(randint(0, 255), randint(0, 255), randint(0, 255)),
             batch=self.particle_batch)
 
+    # Update the circles
     def update(self, dt, window_width, window_height):
         self.circle.update(dt, window_width, window_height)
 
 
 class Lines:
-    color1 = (255, 255, 255)
-
     def __init__(self, window_height, start_outside=True):
+
+        # Particle Batch
         self.particle_batch = Batch()
 
         self.line_x = randint(100, 1180)
-        self.line_y = randint(0, window_height)
+        self.line_y = randint(0, 620)
 
         self.line_x = randint(100, 1180)
         self.line_y = randint(100, 620)
@@ -59,5 +60,6 @@ class Lines:
             batch=self.particle_batch
         )
 
+    # Update the circles
     def update(self, dt, window_width, window_height):
         self.line.update(dt, window_width, window_height)

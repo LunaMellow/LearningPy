@@ -172,12 +172,6 @@ class MushroomCow:
         self.position.x -= 100
         self.position.y += 80
 
-        # # Cow Matrixes
-        # self.translation_matrix = Mat3()
-        # self.rotation_matrix = Mat3()
-        # self.scaling_matrix = Mat3()
-        # self.combined_matrix = Mat3()
-
         ##########################################################
         #                                                        #
         #          THIS IS WHERE WE CREATE THE COW PARTS         #
@@ -203,6 +197,12 @@ class MushroomCow:
 
         # Create Ears part
         self.create_part('rectangle', self.ear_colors, -10, 10, self.Cow_Batch)
+
+        # # Cow Matrixes
+        # self.translation_matrix = Mat3()
+        # self.rotation_matrix = Mat3()
+        # self.scaling_matrix = Mat3()
+        # self.combined_matrix = Mat3()
 
     ##########################################################
     #                                                        #
