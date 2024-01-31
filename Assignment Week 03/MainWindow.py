@@ -11,6 +11,7 @@
     Please go to my GitHub to see my strong
     dedication to this and my overall progress:
     https://github.com/LunaMellow/LearningPy
+    https://github.com/LunaMellow/LearningPy/commits/main/
 
     PS
     -------------------
