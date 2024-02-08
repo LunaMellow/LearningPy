@@ -2,6 +2,8 @@ from pyglet import *
 from pyglet.window import *
 from pyglet.graphics import *
 from random import *
+from pydub import AudioSegment
+import numpy as np
 
 class MainWindow(Window):
     CIRCLE_RADIUS = 10
@@ -23,10 +25,16 @@ class MainWindow(Window):
             radius=self.CIRCLE_RADIUS,
             color=(randint(125, 175), randint(25, 75), randint(100, 255)),
             batch=self.batch,
+        ) for _ in range(self.NUM_CIRCLES)]
 
-        )
-            for _ in range(self.NUM_CIRCLES)
-        ]
+        # Load the audio file
+        audio_path = "/Users/lunasofiebergh/PycharmProjects/LearningPy/AudioVisualizer/Assets/Waves.mp3"
+        audio = AudioSegment.from_mp3(audio_path)
+        samples = np.array(audio.get_array_of_samples())
+        fft_result = np.fft.fft(samples)
+        self.amplitudes = np.abs(fft_result)
+
+        self.amplitude_index = 0
 
     def on_draw(self):
         # Window clear
@@ -40,13 +48,18 @@ class MainWindow(Window):
     # Function to update circle positions
     def update(self, dt):
         try:
+            amplitude = self.amplitudes[self.amplitude_index]
+            self.amplitude_index += 1
+
             for circle in self.circles:
-                # Calculate random velocity
-                velocity_x = uniform(-self.MAX_VELOCITY, self.MAX_VELOCITY)
-                velocity_y = uniform(-self.MAX_VELOCITY, self.MAX_VELOCITY)
+                # Calculate velocity based on amplitude
+                velocity_x = uniform(-amplitude, amplitude) * 0.00001
+                velocity_y = uniform(-amplitude, amplitude) * 0.00001
+
                 # Update circle position
                 circle.x += velocity_x * dt
                 circle.y += velocity_y * dt
+
                 # Wrap around the window edges
                 if circle.x < 0:
                     circle.x = self.wx
