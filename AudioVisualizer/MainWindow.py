@@ -20,8 +20,8 @@ class MainWindow(Window):
         self.batch = Batch()
 
         self.circles = [pyglet.shapes.Circle(
-            x=randint(50, self.wx - 50),
-            y=randint(50, self.wy - 50),
+            x=self.wx,
+            y=self.wy,
             radius=self.CIRCLE_RADIUS,
             color=(randint(125, 175), randint(25, 75), randint(100, 255)),
             batch=self.batch,
@@ -35,6 +35,11 @@ class MainWindow(Window):
         self.amplitudes = np.abs(fft_result)
 
         self.amplitude_index = 0
+
+        # Create a player object to play the audio
+        self.player = pyglet.media.Player()
+        self.player.queue(pyglet.media.load(audio_path))
+        self.player.play()
 
     def on_draw(self):
         # Window clear
