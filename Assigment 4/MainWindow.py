@@ -1,3 +1,15 @@
+"""
+
+    Assigment 4
+    -------------------
+    Question 5
+
+    @brief   :  Pyglet interpolation
+    @author  :  Luna Sofie Bergh
+    @date    :  16-02-2024
+
+"""
+
 # Library Imports
 from pyglet import *
 from pyglet.app import *
